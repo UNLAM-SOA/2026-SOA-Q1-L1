@@ -28,6 +28,8 @@ public class ControlFragment extends Fragment implements SensorEventListener {
     private Sensor acelerometro;
     private Switch switchShake;
     private boolean ledEncendido = false;
+
+    private int CENTRO_SEEK_CERVO = 90;
     private long ultimoShake = 0;
     private static final float UMBRAL_SHAKE = 12f;
     private static final long DELAY_SHAKE = 1000;
@@ -43,6 +45,9 @@ public class ControlFragment extends Fragment implements SensorEventListener {
         progressPos = view.findViewById(R.id.progressPos);
         progressLuz = view.findViewById(R.id.progressLuz);
         switchShake = view.findViewById(R.id.switchShake);
+
+        seekServo.setProgress(CENTRO_SEEK_CERVO);
+        btnEnviar.setEnabled(false);
 
         sensorManager = (SensorManager) requireContext().getSystemService(getContext().SENSOR_SERVICE);
         acelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -66,20 +71,36 @@ public class ControlFragment extends Fragment implements SensorEventListener {
         switchModo.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String modo = isChecked ? "manual" : "automatico";
             MqttHandler.getInstance(getContext()).publish("espejo/control/modo", modo);
+
+            btnEnviar.setEnabled(isChecked);
+
+            if(!isChecked){
+                switchShake.setChecked(false);
+            }
+
         });
 
         btnEnviar.setOnClickListener(v -> {
-            String valorServo = String.valueOf(seekServo.getProgress());
-            String valorLuz = String.valueOf(seekLuz.getProgress());
+                String valorServo = String.valueOf(seekServo.getProgress());
+                String valorLuz = String.valueOf(seekLuz.getProgress());
 
-            MqttHandler.getInstance(getContext()).publish("espejo/control/servo", valorServo);
-            MqttHandler.getInstance(getContext()).publish("espejo/control/luz", valorLuz);
+                MqttHandler.getInstance(getContext()).publish("espejo/control/servo", valorServo);
+                MqttHandler.getInstance(getContext()).publish("espejo/control/luz", valorLuz);
         });
 
         seekServo.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progressPos.setText(String.valueOf(progress));
+                int valorReal = progress - CENTRO_SEEK_CERVO;
+
+                if (valorReal < 0) {
+                    progressPos.setText(valorReal + "° Izquierda");
+                } else if (valorReal > 0){
+                    progressPos.setText(valorReal + "° Derecha");
+                } else {
+                    progressPos.setText("centro");
+                }
+
             }
             @Override public void onStartTrackingTouch(SeekBar seekBar) {
 
