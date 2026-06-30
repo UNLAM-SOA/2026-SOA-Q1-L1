@@ -49,6 +49,9 @@ public class DashboardActivity extends AppCompatActivity {
             }
             return true;
         });
+
+        Intent serviceIntent = new Intent(this, TimeUseAlertService.class);
+        startForegroundService(serviceIntent);
     }
 
     private void cargarFragment(Fragment fragment) {
