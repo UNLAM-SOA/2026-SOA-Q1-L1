@@ -41,7 +41,6 @@ public class TimeUseAlertService extends Service {
         
         createNotificationChannel();
         
-        // Iniciar como Foreground Service
         startForeground(FOREGROUND_NOTIFICATION_ID, createForegroundNotification());
 
         lastNoPresenceTimestamp = System.currentTimeMillis();
@@ -56,7 +55,7 @@ public class TimeUseAlertService extends Service {
         };
 
         IntentFilter filter = new IntentFilter(MqttHandler.ACTION_DATA_RECEIVE);
-        // minSdk is 33, so RECEIVER_NOT_EXPORTED is available and required for local broadcasts
+
         registerReceiver(mqttDataReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
     }
 
