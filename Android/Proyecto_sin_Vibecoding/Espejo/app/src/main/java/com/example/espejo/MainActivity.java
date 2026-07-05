@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         botonComenzar.setOnClickListener(v -> {
             Intent intent = new Intent(this, Conexion.class);
             startActivity(intent);
+            finish();
         });
     }
 

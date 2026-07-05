@@ -62,6 +62,7 @@ public class Conexion extends AppCompatActivity {
             if(exito){
                 Intent intent = new Intent(this, DashboardActivity.class);
                 startActivity(intent);
+                finish();
             }else{
                 Toast.makeText(this, "No se pudo conectar", Toast.LENGTH_SHORT).show();
             }
