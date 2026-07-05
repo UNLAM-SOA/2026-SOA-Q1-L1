@@ -77,6 +77,7 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onDestroy() {
         MqttHandler.getInstance(this).disconnect();
         unregisterReceiver(connectionLost);
+        stopService(new Intent(this, TimeUseAlertService.class));
         super.onDestroy();
 
     }
