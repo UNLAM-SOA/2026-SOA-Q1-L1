@@ -49,7 +49,7 @@
 #define SERVO_SETTLE_TIME_MS            20
 
 #define SOUND_SPEED_CM_PER_US 0.0343f
-#define MAX_TIMEOUT_US 4500UL
+#define MAX_TIMEOUT_US 4000UL
 #define INVALID_DISTANCE_CM            -1.0f
 
 #define LDR_PIN                     34
