@@ -834,7 +834,7 @@ void action_mqtt_light_on(void)
   if(get_current_control_mode() != CONTROL_MODE_MANUAL)
     return;
 
-  target_led_brightness = calculate_led_brightness(ldr_value);
+  target_led_brightness = LED_MAX_BRIGHTNESS;
   set_led_brightness(target_led_brightness);
 }
 
